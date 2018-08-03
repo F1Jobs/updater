@@ -15,6 +15,8 @@ MARKUP_PATH = "/home/ayush/Projects/f1jobs/data/markup/"
 _content_pre = """<div class="row"><div class="ten columns"><p>"""
 _content_mid = """</p></div><div class="two columns apply-btn"><a href=\""""
 _content_end = """\" target="_blank" rel="noreferrer" class="apply-btn-link"><code><strong>APPLY</strong></code></a></div></div>"""
+_count_pre = """<div class="row"><div class="ten columns"><h5>Available Jobs: """
+_count_end = """</h5></div></div><br>"""
 
 
 #MERCEDES
@@ -32,6 +34,7 @@ def mercedes():
     with open(JSON_PATH + "MER.json", "w") as merc_fo:
         json.dump(merc_dict, merc_fo)
     with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
+        merc_mkp_fo.write(_count_pre + str(len(merc_dict)) + _count_end + "\n\n")
         for k in merc_dict:
             merc_mkp_fo.write(_content_pre + k + _content_mid + merc_dict[k] + _content_end)
             merc_mkp_fo.write("\n\n")
@@ -121,6 +124,7 @@ def ferrari():
     with open(JSON_PATH + "FER.json", "w") as fer_fo:
         json.dump(fer_dict, fer_fo)
     with open(MARKUP_PATH + "FER", "w") as fer_mkp_fo:
+        fer_mkp_fo.write(_count_pre + str(len(fer_dict)) + _count_end + "\n\n")
         for k in fer_dict:
             fer_mkp_fo.write(_content_pre + k + _content_mid + fer_dict[k] + _content_end)
             fer_mkp_fo.write("\n\n")
@@ -142,6 +146,7 @@ def haas():
     with open(JSON_PATH + "HAS.json", "w") as haas_fo:
         json.dump(haas_dict, haas_fo)
     with open(MARKUP_PATH + "HAS", "w") as haas_mkp_fo:
+        haas_mkp_fo.write(_count_pre + str(len(haas_dict)) + _count_end + "\n\n")
         for k in haas_dict:
             haas_mkp_fo.write(_content_pre + k + _content_mid + haas_dict[k] + _content_end)
             haas_mkp_fo.write("\n\n")
@@ -163,6 +168,7 @@ def renault():
     with open(JSON_PATH + "REN.json", "w") as renault_fo:
         json.dump(renault_dict, renault_fo)
     with open(MARKUP_PATH + "REN", "w") as renault_mkp_fo:
+        renault_mkp_fo.write(_count_pre + str(len(renault_dict)) + _count_end + "\n\n")
         for k in renault_dict:
             renault_mkp_fo.write(_content_pre + k + _content_mid + renault_dict[k] + _content_end)
             renault_mkp_fo.write("\n\n")
@@ -185,6 +191,7 @@ def redbull():
     with open(JSON_PATH + "RBR.json", "w") as rbr_fo:
         json.dump(rbr_dict, rbr_fo)
     with open(MARKUP_PATH + "RBR", "w") as rbr_mkp_fo:
+        rbr_mkp_fo.write(_count_pre + str(len(rbr_dict)) + _count_end + "\n\n")
         for k in rbr_dict:
             rbr_mkp_fo.write(_content_pre + k + _content_mid + rbr_dict[k] + _content_end)
             rbr_mkp_fo.write("\n\n")
@@ -205,6 +212,7 @@ def sauber():
     with open(JSON_PATH + "SAU.json", "w") as sauber_fo:
         json.dump(sauber_dict, sauber_fo)
     with open(MARKUP_PATH + "SAU", "w") as sauber_mkp_fo:
+        sauber_mkp_fo.write(_count_pre + str(len(sauber_dict)) + _count_end + "\n\n")
         for k in sauber_dict:
             sauber_mkp_fo.write(_content_pre + k + _content_mid + sauber_dict[k] + _content_end)
             sauber_mkp_fo.write("\n\n")
@@ -226,6 +234,7 @@ def mclaren():
     with open(JSON_PATH + "MCL.json", "w") as mc_fo:
         json.dump(mc_dict, mc_fo)
     with open(MARKUP_PATH + "MCL", "w") as mc_mkp_fo:
+        mc_mkp_fo.write(_count_pre + str(len(mc_dict)) + _count_end + "\n\n")
         for k in mc_dict:
             mc_mkp_fo.write(_content_pre + k + _content_mid + mc_dict[k] + _content_end)
             mc_mkp_fo.write("\n\n")
@@ -257,6 +266,7 @@ def williams():
     with open(JSON_PATH + "WIL.json", "w") as williams_fo:
         json.dump(williams_dict, williams_fo)
     with open(MARKUP_PATH + "WIL", "w") as williams_mkp_fo:
+        williams_mkp_fo.write(_count_pre + str(len(williams_dict)) + _count_end + "\n\n")
         for k in williams_dict:
             williams_mkp_fo.write(_content_pre + k + _content_mid + williams_dict[k] + _content_end)
             williams_mkp_fo.write("\n\n")
@@ -277,6 +287,7 @@ def toro():
     with open(JSON_PATH + "TOR.json", "w") as toro_fo:
         json.dump(toro_dict, toro_fo)
     with open(MARKUP_PATH + "TOR", "w") as toro_mkp_fo:
+        toro_mkp_fo.write(_count_pre + str(len(toro_dict)) + _count_end + "\n\n")
         for k in toro_dict:
             toro_mkp_fo.write(_content_pre + k + _content_mid + toro_dict[k] + _content_end)
             toro_mkp_fo.write("\n\n")
