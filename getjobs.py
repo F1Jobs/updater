@@ -5,13 +5,14 @@ import requests
 import time
 
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
 
 #MERCEDES
 def mercedes():
-    merc_dict = {}
+    merc_dict = OrderedDict()
     merc_pre_url = "http://careers.mercedesamgf1.com"
     merc_url = merc_pre_url + "/vacancies/?s_keywords="
 
@@ -27,7 +28,7 @@ def mercedes():
 
 #FERRARI
 def ferrari():
-    fer_dict = {}
+    fer_dict = OrderedDict()
     cookielist=[]
     fer_job_url = "http://corporate.ferrari.com/en/career/career-opportunities"
     
@@ -112,7 +113,7 @@ def ferrari():
 
 #HAAS
 def haas():
-    haas_dict = {}
+    haas_dict = OrderedDict()
     haas_pre_url = "https://haasf1team.applytojob.com"
     haas_url = haas_pre_url + "/apply/jobs/"
 
@@ -122,14 +123,14 @@ def haas():
 
     for has in tag:
         haas_dict[has.text] = haas_pre_url + has.get('href')
-
+    
     with open("HAS.json", "w") as haas_fo:
         json.dump(haas_dict, haas_fo)
 
 
 #RENAULT
 def renault():
-    renault_dict = {}
+    renault_dict = OrderedDict()
     renault_pre_url = "https://www.renaultsport.com/"
     renault_url = renault_pre_url + "-Emplois-.html"
 
@@ -146,7 +147,7 @@ def renault():
 
 #REDBULL
 def redbull():
-    rbr_dict = {}
+    rbr_dict = OrderedDict()
     rbr_url = "http://redbullracing.redbull.com/careerslisting"
 
     r = requests.get(rbr_url)
@@ -164,7 +165,7 @@ def redbull():
 
 #SAUBER
 def sauber():
-    sauber_dict = {}
+    sauber_dict = OrderedDict()
     sauber_url = "https://www.sauberf1team.com/jobs"
 
     r = requests.get(sauber_url)
@@ -180,7 +181,7 @@ def sauber():
 
 #MCLAREN
 def mclaren():
-    mc_dict = {}
+    mc_dict = OrderedDict()
     mc_pre_url = "https://careers.mclaren.com"
     mc_url = mc_pre_url + "/go/Racing/724201/?utm_source=careersite"
 
@@ -197,7 +198,7 @@ def mclaren():
 
 #WILLIAMS
 def williams():
-    williams_dict = {}
+    williams_dict = OrderedDict()
     williams_pre_url = "http://www.williamsf1.com"
     williams_url = williams_pre_url + "/pages/careers/WMR"
     williams_url_ajl = williams_pre_url + "/pages/careers/WAE"
@@ -224,7 +225,7 @@ def williams():
 
 #TOROROSSO
 def toro():
-    toro_dict = {}
+    toro_dict = OrderedDict()
     toro_url = "https://portal.tororosso.com/Jobs/SitePages/ViewJobOpportunities.aspx"
 
     r = requests.get(toro_url)
