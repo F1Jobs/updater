@@ -2,12 +2,19 @@
 
 import json
 import requests
-import time
 
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 from multiprocessing import Pool
 from subprocess import Popen, PIPE
+
+
+JSON_PATH = "/home/ayush/Projects/f1jobs/data/json/"
+MARKUP_PATH = "/home/ayush/Projects/f1jobs/data/markup/"
+
+_content_pre = """<div class="row"><div class="ten columns"><p>"""
+_content_mid = """</p></div><div class="two columns apply-btn"><a href=\""""
+_content_end = """\" target="_blank" rel="noreferrer" class="apply-btn-link"><code><strong>APPLY</strong></code></a></div></div>"""
 
 
 #MERCEDES
@@ -22,8 +29,12 @@ def mercedes():
 
     for merc in tag:
         merc_dict[merc.a.text] = merc_pre_url + merc.a.get('href')
-    with open("MER.json", "w") as merc_fo:
+    with open(JSON_PATH + "MER.json", "w") as merc_fo:
         json.dump(merc_dict, merc_fo)
+    with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
+        for k in merc_dict:
+            merc_mkp_fo.write(_content_pre + k + _content_mid + merc_dict[k] + _content_end)
+            merc_mkp_fo.write("\n\n")
 
 
 #FERRARI
@@ -107,8 +118,12 @@ def ferrari():
     for dc in data_chunks:
         get_ferrari_jobs(requests.post(fer_url, cookies=cookies, data=dc))
 
-    with open("FER.json", "w") as fer_fo:
+    with open(JSON_PATH + "FER.json", "w") as fer_fo:
         json.dump(fer_dict, fer_fo)
+    with open(MARKUP_PATH + "FER", "w") as fer_mkp_fo:
+        for k in fer_dict:
+            fer_mkp_fo.write(_content_pre + k + _content_mid + fer_dict[k] + _content_end)
+            fer_mkp_fo.write("\n\n")
 
 
 #HAAS
@@ -124,8 +139,12 @@ def haas():
     for has in tag:
         haas_dict[has.text] = haas_pre_url + has.get('href')
     
-    with open("HAS.json", "w") as haas_fo:
+    with open(JSON_PATH + "HAS.json", "w") as haas_fo:
         json.dump(haas_dict, haas_fo)
+    with open(MARKUP_PATH + "HAS", "w") as haas_mkp_fo:
+        for k in haas_dict:
+            haas_mkp_fo.write(_content_pre + k + _content_mid + haas_dict[k] + _content_end)
+            haas_mkp_fo.write("\n\n")
 
 
 #RENAULT
@@ -141,8 +160,12 @@ def renault():
     for ren in tag:
         renault_dict[ren.text] = renault_pre_url + ren.parent.parent.get('href')
 
-    with open("REN.json", "w") as renault_fo:
+    with open(JSON_PATH + "REN.json", "w") as renault_fo:
         json.dump(renault_dict, renault_fo)
+    with open(MARKUP_PATH + "REN", "w") as renault_mkp_fo:
+        for k in renault_dict:
+            renault_mkp_fo.write(_content_pre + k + _content_mid + renault_dict[k] + _content_end)
+            renault_mkp_fo.write("\n\n")
 
 
 #REDBULL
@@ -159,8 +182,12 @@ def redbull():
     for rbr, rbr_jobs_url in zip(tag, tag_ext):
         rbr_dict[rbr.text] = rbr_jobs_url.get('href')
 
-    with open("RBR.json", "w") as rbr_fo:
+    with open(JSON_PATH + "RBR.json", "w") as rbr_fo:
         json.dump(rbr_dict, rbr_fo)
+    with open(MARKUP_PATH + "RBR", "w") as rbr_mkp_fo:
+        for k in rbr_dict:
+            rbr_mkp_fo.write(_content_pre + k + _content_mid + rbr_dict[k] + _content_end)
+            rbr_mkp_fo.write("\n\n")
 
 
 #SAUBER
@@ -175,8 +202,12 @@ def sauber():
     for sau in tag:
         sauber_dict[sau.span.text] = sau.a.get('href')
 
-    with open("SAU.json", "w") as sauber_fo:
+    with open(JSON_PATH + "SAU.json", "w") as sauber_fo:
         json.dump(sauber_dict, sauber_fo)
+    with open(MARKUP_PATH + "SAU", "w") as sauber_mkp_fo:
+        for k in sauber_dict:
+            sauber_mkp_fo.write(_content_pre + k + _content_mid + sauber_dict[k] + _content_end)
+            sauber_mkp_fo.write("\n\n")
 
 
 #MCLAREN
@@ -192,8 +223,12 @@ def mclaren():
     for mc in tag:
         mc_dict[mc.text] = mc_pre_url + mc.get('href')
 
-    with open("MCL.json", "w") as mc_fo:
+    with open(JSON_PATH + "MCL.json", "w") as mc_fo:
         json.dump(mc_dict, mc_fo)
+    with open(MARKUP_PATH + "MCL", "w") as mc_mkp_fo:
+        for k in mc_dict:
+            mc_mkp_fo.write(_content_pre + k + _content_mid + mc_dict[k] + _content_end)
+            mc_mkp_fo.write("\n\n")
 
 
 #WILLIAMS
@@ -219,8 +254,12 @@ def williams():
     for wc in wil_categories:
         get_williams_jobs(wc)
 
-    with open("WIL.json", "w") as williams_fo:
+    with open(JSON_PATH + "WIL.json", "w") as williams_fo:
         json.dump(williams_dict, williams_fo)
+    with open(MARKUP_PATH + "WIL", "w") as williams_mkp_fo:
+        for k in williams_dict:
+            williams_mkp_fo.write(_content_pre + k + _content_mid + williams_dict[k] + _content_end)
+            williams_mkp_fo.write("\n\n")
 
 
 #TOROROSSO
@@ -235,13 +274,16 @@ def toro():
     for tor in tag:
         toro_dict[tor.a.text] = tor.a.get('href').replace("&amp", "&")
 
-    with open("TOR.json", "w") as toro_fo:
+    with open(JSON_PATH + "TOR.json", "w") as toro_fo:
         json.dump(toro_dict, toro_fo)
+    with open(MARKUP_PATH + "TOR", "w") as toro_mkp_fo:
+        for k in toro_dict:
+            toro_mkp_fo.write(_content_pre + k + _content_mid + toro_dict[k] + _content_end)
+            toro_mkp_fo.write("\n\n")
 
 
 def main():
 
-    start = time.time()
     pool = Pool(processes=16)
 
     constructors = [ferrari, haas, redbull, sauber, renault, mercedes, mclaren, williams, toro]
@@ -250,7 +292,6 @@ def main():
 
     pool.close()
     pool.join()
-    print (time.time() - start)
 
 
 if __name__ == '__main__':
