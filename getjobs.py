@@ -9,14 +9,15 @@ from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
 
-JSON_PATH = "/home/ayush/Projects/f1jobs/data/json/"
-MARKUP_PATH = "/home/ayush/Projects/f1jobs/data/markup/"
+JSON_PATH = "/home/ayush/Projects/client/data/json/"
+MARKUP_PATH = "/home/ayush/Projects/client/data/markup/"
 
 _content_pre = """<div class="row"><div class="ten columns"><p>"""
 _content_mid = """</p></div><div class="two columns apply-btn"><a href=\""""
 _content_end = """\" target="_blank" rel="noreferrer" class="apply-btn-link"><code><strong>APPLY</strong></code></a></div></div>"""
 _count_pre = """<div class="row"><div class="ten columns"><h5>Available Jobs: """
 _count_end = """</h5></div></div><br>"""
+_empty = """<div class="row"><div class="ten columns"><h5 class="no-jobs">No job listings found! Check back later.</h5></div></div>"""
 
 
 #MERCEDES
@@ -25,19 +26,29 @@ def mercedes():
     merc_pre_url = "http://careers.mercedesamgf1.com"
     merc_url = merc_pre_url + "/vacancies/?s_keywords="
 
-    r = requests.get(merc_url)
+    try:
+        r = requests.get(merc_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to MERCEDES")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("div", class_ = "job-item")
 
     for merc in tag:
         merc_dict[merc.a.text] = merc_pre_url + merc.a.get('href')
+
     with open(JSON_PATH + "MER.json", "w") as merc_fo:
         json.dump(merc_dict, merc_fo)
-    with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
-        merc_mkp_fo.write(_count_pre + str(len(merc_dict)) + _count_end + "\n\n")
-        for k in merc_dict:
-            merc_mkp_fo.write(_content_pre + k + _content_mid + merc_dict[k] + _content_end)
-            merc_mkp_fo.write("\n\n")
+    if(merc_dict):
+        with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
+            merc_mkp_fo.write(_count_pre + str(len(merc_dict)) + _count_end + "\n\n")
+            for k in merc_dict:
+                merc_mkp_fo.write(_content_pre + k + _content_mid + merc_dict[k] + _content_end)
+                merc_mkp_fo.write("\n\n")
+    else:
+        with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
+            merc_mkp_fo.write(_empty + "\n\n")
 
 
 #FERRARI
@@ -119,7 +130,11 @@ def ferrari():
 
     data_chunks = [data_chunk_one, data_chunk_two]
     for dc in data_chunks:
-        get_ferrari_jobs(requests.post(fer_url, cookies=cookies, data=dc))
+        try:
+            get_ferrari_jobs(requests.post(fer_url, cookies=cookies, data=dc))
+        except requests.exceptions.RequestException as e:
+            print("An exception occured while connecting to FERRARI")
+            print(e)
 
     with open(JSON_PATH + "FER.json", "w") as fer_fo:
         json.dump(fer_dict, fer_fo)
@@ -136,7 +151,12 @@ def haas():
     haas_pre_url = "https://haasf1team.applytojob.com"
     haas_url = haas_pre_url + "/apply/jobs/"
 
-    r = requests.get(haas_url)
+    try:
+        r = requests.get(haas_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to HAAS")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("a", class_ = "job_title_link")
 
@@ -158,7 +178,12 @@ def renault():
     renault_pre_url = "https://www.renaultsport.com/"
     renault_url = renault_pre_url + "-Emplois-.html"
 
-    r = requests.get(renault_url)
+    try:
+        r = requests.get(renault_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to HAAS")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("h1", class_ = "h4")
 
@@ -179,7 +204,12 @@ def redbull():
     rbr_dict = OrderedDict()
     rbr_url = "http://redbullracing.redbull.com/careerslisting"
 
-    r = requests.get(rbr_url)
+    try:
+        r = requests.get(rbr_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to RED BULL")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
 
     tag = soup.find_all("span", class_ = "jobslist_listing_item_title_text")
@@ -202,7 +232,12 @@ def sauber():
     sauber_dict = OrderedDict()
     sauber_url = "https://www.sauberf1team.com/jobs"
 
-    r = requests.get(sauber_url)
+    try:
+        r = requests.get(sauber_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to SAUBER")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("div", class_ = "jobs_single_listing")
 
@@ -224,7 +259,12 @@ def mclaren():
     mc_pre_url = "https://careers.mclaren.com"
     mc_url = mc_pre_url + "/go/Racing/724201/?utm_source=careersite"
 
-    r = requests.get(mc_url)
+    try:
+        r = requests.get(mc_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to McLAREN")
+        print(e)
+    
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("a", class_ = "jobTitle-link")
 
@@ -255,9 +295,17 @@ def williams():
                 williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
             except AttributeError:
                 pass
+    try:
+        r = requests.get(williams_url)
+    except requests.exceptions.RequestException as e1:
+        print("An exception occured while connecting to WILLIAMS WMR")
+        print(e1)
 
-    r = requests.get(williams_url)
-    r_ajl = requests.get(williams_url_ajl)
+    try:
+        r_ajl = requests.get(williams_url_ajl)
+    except requests.exceptions.RequestException as e2:
+        print("An exception occured while connecting to WILLIAMS WAE")
+        print(e2)
 
     wil_categories = [r, r_ajl]
     for wc in wil_categories:
@@ -277,7 +325,12 @@ def toro():
     toro_dict = OrderedDict()
     toro_url = "https://portal.tororosso.com/Jobs/SitePages/ViewJobOpportunities.aspx"
 
-    r = requests.get(toro_url)
+    try:
+        r = requests.get(toro_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to TORO ROSSO")
+        print(e)
+
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("td", class_ = "ms-vb-title")
 
