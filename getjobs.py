@@ -61,7 +61,8 @@ def ferrari():
         soup = BeautifulSoup(r.content, 'html.parser')
         tag = soup.find_all("span", class_="rs_lab_prsearch")
         for fer in tag:
-            fer_dict[fer.div.text] = fer_job_url
+            if(fer.div.text.startswith("Ferrari F1 Team")):
+                fer_dict[fer.div.text] = fer_job_url
 
     process = Popen(['phantomjs', 'getcookies.js'],
                     stdout=PIPE, 
@@ -309,31 +310,21 @@ def williams():
     williams_dict = OrderedDict()
     williams_pre_url = "http://www.williamsf1.com"
     williams_url = williams_pre_url + "/pages/careers/WMR"
-    williams_url_ajl = williams_pre_url + "/pages/careers/WAE"
 
-    def get_williams_jobs(r):
-        soup = BeautifulSoup(r.content, 'html.parser')
-        tag = soup.find_all("div", class_ = "job-title")
-        for wil in tag:
-            try:
-                williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
-            except AttributeError:
-                pass
     try:
         r = requests.get(williams_url)
-    except requests.exceptions.RequestException as e1:
+    except requests.exceptions.RequestException as e:
         print("An exception occured while connecting to WILLIAMS WMR")
-        print(e1)
+        print(e)
 
-    try:
-        r_ajl = requests.get(williams_url_ajl)
-    except requests.exceptions.RequestException as e2:
-        print("An exception occured while connecting to WILLIAMS WAE")
-        print(e2)
-
-    wil_categories = [r, r_ajl]
-    for wc in wil_categories:
-        get_williams_jobs(wc)
+    soup = BeautifulSoup(r.content, 'html.parser')
+    tag = soup.find_all("div", class_ = "job-title")
+    
+    for wil in tag:
+        try:
+            williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
+        except AttributeError:
+            pass
 
     with open(JSON_PATH + "WIL.json", "w") as williams_fo:
         json.dump(williams_dict, williams_fo)
