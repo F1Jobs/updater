@@ -12,6 +12,6 @@ This is the update mechanism of [f1jobs.co](https://f1jobs.co), which runs on a 
 
 ## Todo
 
-* Add descriptive comments to `getjobs.py`.
+* ~~Add descriptive comments to `getjobs.py`.~~
 * Update README with more detailed description.
 * Restructure the main directory, and add tests and Dockerfile.
