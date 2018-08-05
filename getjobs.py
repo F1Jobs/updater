@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+# The main script that queries the career pages of all the F1 teams to get
+# job titles and corresponding application links, and writes this data into
+# the 'data/' directory of the client repository. Each F1 team's data is
+# handles by a separate function, which are executed in parallel.
+
+# Important: Sahara Force India has no job listings currently, so their website
+# is not queried. One they add some jobs, I'll add a function for them.
+
+# Imports.
 import json
 import requests
 
@@ -9,9 +18,15 @@ from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
 
+# Paths of the data directory. These will change once deployed on
+# a web server.
 JSON_PATH = "/home/ayush/Projects/client/data/json/"
 MARKUP_PATH = "/home/ayush/Projects/client/data/markup/"
 
+
+# HTML strings that are added to data written in the 'data/markup/' directory. This
+# makes that data valid markup which is imported by the client and attached to the
+# web page as-is.
 _content_pre = """<div class="row"><div class="ten columns"><p>"""
 _content_mid = """</p></div><div class="two columns apply-btn"><a href=\""""
 _content_end = """\" target="_blank" rel="noreferrer" class="apply-btn-link"><code><strong>APPLY</strong></code></a></div></div>"""
@@ -20,26 +35,39 @@ _count_end = """</h5></div></div><br>"""
 _empty = """<div class="row"><div class="ten columns"><h5 class="no-jobs">No job listings found! Check back later.</h5></div></div>"""
 
 
-#MERCEDES
+# Mercedes jobs.
 def mercedes():
+    # The purpose of OrderedDict is to maintain the order of job listings to ensure
+    # uniformity and reduce the number of commits pushed.
     merc_dict = OrderedDict()
     merc_pre_url = "http://careers.mercedesamgf1.com"
     merc_url = merc_pre_url + "/vacancies/?s_keywords="
 
+    # A GET request to the careers page.
     try:
         r = requests.get(merc_url)
     except requests.exceptions.RequestException as e:
         print("An exception occured while connecting to MERCEDES")
         print(e)
 
+    # Finding relavant tags in the markup by class name
     soup = BeautifulSoup(r.content, 'html.parser')
     tag = soup.find_all("div", class_ = "job-item")
 
+    # Write the data to the dictionary. Key:Value pairs are Job-Title:Job-Link.
     for merc in tag:
         merc_dict[merc.a.text] = merc_pre_url + merc.a.get('href')
 
+    # Dump the dictionary into a JSON file. It is not used anywhere, just for
+    # reference.
     with open(JSON_PATH + "MER.json", "w") as merc_fo:
         json.dump(merc_dict, merc_fo)
+
+    # If the dictionary is not empty, write the data to 'data/markup/' directory
+    # by attaching relevant strings so it is valid markup ready to be consumed by
+    # the client. If the dictionary is empty, the tags were not found, and there
+    # are no job listings. This can also mean the class value of the tags has been
+    # changed, which needs manual investigation of the webpage.
     if(merc_dict):
         with open(MARKUP_PATH + "MER", "w") as merc_mkp_fo:
             merc_mkp_fo.write(_count_pre + str(len(merc_dict)) + _count_end + "\n\n")
@@ -51,10 +79,22 @@ def mercedes():
             merc_mkp_fo.write(_empty + "\n\n")
 
 
-#FERRARI
+# Ferrari jobs.
 def ferrari():
+    # This is a special case. This fucntion does not work like the others. This is
+    # because Ferrari decided to use XHR to fetch their job listings instead of embedding
+    # them into the markup, and to those XHRs send a valid response only when valid cookies
+    # (which are set by the Ferrari careers page) are included in the request header.
+    # Additionally, the response depends on the data you send with the request. This
+    # function uses PhantomJS with an additional script 'getcookies.js' to retrieve the
+    # cookies, and then proceeds with a POST request to fetch the response (which is unusually
+    # large for a careers page with ~10 jobs per page). The rest(getting job titles and links)
+    # is similar to other functions.
+    # Note: This method is not very robust at the moment because it does not look beyond pre-
+    # defined number of pages. It will be replaced with a better method soon.
     fer_dict = OrderedDict()
     cookielist=[]
+    fer_url = "https://hr.ferrari.com/cvo3ferrari/jsp/repeatbody.jsp?jkcptlva"
     fer_job_url = "http://corporate.ferrari.com/en/career/career-opportunities"
     
     def get_ferrari_jobs(r):
@@ -64,15 +104,14 @@ def ferrari():
             if(fer.div.text.startswith("Ferrari F1 Team")):
                 fer_dict[fer.div.text] = fer_job_url
 
+    # Getting the cookies by running 'phantomjs getcookies.js'. See the repo
+    # for more details on 'getcookies.js'.
     process = Popen(['phantomjs', 'getcookies.js'],
                     stdout=PIPE, 
                     stderr=PIPE)
-
     for cookie in process.stdout:
         cookielist.append(cookie.decode("utf-8").rstrip())
     errc = process.returncode
-
-    fer_url = "https://hr.ferrari.com/cvo3ferrari/jsp/repeatbody.jsp?jkcptlva"
 
     cookies = {
         'spcookie': cookielist[0],
@@ -137,6 +176,7 @@ def ferrari():
             print("An exception occured while connecting to FERRARI")
             print(e)
 
+    # This section is similar to that of Mercedes.
     with open(JSON_PATH + "FER.json", "w") as fer_fo:
         json.dump(fer_dict, fer_fo)
     if(fer_dict):
@@ -150,7 +190,7 @@ def ferrari():
             fer_mkp_fo.write(_empty + "\n\n")
 
 
-#HAAS
+# Haas jobs. This method is similar to Mercedes.
 def haas():
     haas_dict = OrderedDict()
     haas_pre_url = "https://haasf1team.applytojob.com"
@@ -181,7 +221,7 @@ def haas():
             haas_mkp_fo.write(_empty + "\n\n")
 
 
-#RENAULT
+# Renault jobs. This method is similar to Mercedes.
 def renault():
     renault_dict = OrderedDict()
     renault_pre_url = "https://www.renaultsport.com/"
@@ -212,7 +252,8 @@ def renault():
             renault_mkp_fo.write(_empty + "\n\n")
 
 
-#REDBULL
+# Red Bull jobs. This method is almost similar to Mercedes. There is slight difference
+# in the way the dictionary is formed.
 def redbull():
     rbr_dict = OrderedDict()
     rbr_url = "http://redbullracing.redbull.com/careerslisting"
@@ -244,7 +285,7 @@ def redbull():
             rbr_mkp_fo.write(_empty + "\n\n")
 
 
-#SAUBER
+# Sauber jobs. This method is similar to Mercedes.
 def sauber():
     sauber_dict = OrderedDict()
     sauber_url = "https://www.sauberf1team.com/jobs"
@@ -274,7 +315,7 @@ def sauber():
             sauber_mkp_fo.write(_empty + "\n\n")
 
 
-#MCLAREN
+# McLaren jobs. This method is similar to Mercedes.
 def mclaren():
     mc_dict = OrderedDict()
     mc_pre_url = "https://careers.mclaren.com"
@@ -305,7 +346,7 @@ def mclaren():
             mc_mkp_fo.write(_empty + "\n\n")
 
 
-#WILLIAMS
+# Williams jobs. This method is similar to Mercedes.
 def williams():
     williams_dict = OrderedDict()
     williams_pre_url = "http://www.williamsf1.com"
@@ -339,7 +380,7 @@ def williams():
             williams_mkp_fo.write(_empty + "\n\n")
 
 
-#TOROROSSO
+# Toro Rosso jobs. This method is similar to Mercedes.
 def toro():
     toro_dict = OrderedDict()
     toro_url = "https://portal.tororosso.com/Jobs/SitePages/ViewJobOpportunities.aspx"
@@ -368,7 +409,9 @@ def toro():
         with open(MARKUP_PATH + "TOR", "w") as toro_mkp_fo:
             toro_mkp_fo.write(_empty + "\n\n")
 
-#MAIN
+
+# The main function. It uses multiprocessing to leverage multiple processors on
+# the machine to speed up the data retrieval time.
 def main():
 
     pool = Pool(processes=16)
