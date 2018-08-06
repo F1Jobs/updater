@@ -3,7 +3,7 @@
 # The main script that queries the career pages of all the F1 teams to get
 # job titles and corresponding application links, and writes this data into
 # the 'data/' directory of the client repository. Each F1 team's data is
-# handles by a separate function, which are executed in parallel.
+# handled by a separate function, which are executed in parallel.
 
 # Important: Sahara Force India has no job listings currently, so their website
 # is not queried. One they add some jobs, I'll add a function for them.
