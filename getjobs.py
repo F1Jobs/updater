@@ -81,7 +81,7 @@ def mercedes():
 
 # Ferrari jobs.
 def ferrari():
-    # This is a special case. This fucntion does not work like the others. This is
+    # This is a special case. This function does not work like the others. This is
     # because Ferrari decided to use XHR to fetch their job listings instead of embedding
     # them into the markup, and to those XHRs send a valid response only when valid cookies
     # (which are set by the Ferrari careers page) are included in the request header.
