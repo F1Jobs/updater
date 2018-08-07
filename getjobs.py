@@ -230,7 +230,7 @@ def renault():
     try:
         r = requests.get(renault_url)
     except requests.exceptions.RequestException as e:
-        print("An exception occured while connecting to HAAS")
+        print("An exception occured while connecting to RENAULT")
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
