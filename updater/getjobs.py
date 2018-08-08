@@ -18,10 +18,9 @@ from multiprocessing import Pool
 from subprocess import Popen, PIPE
 
 
-# Paths of the data directory. These will change once deployed on
-# a web server.
-JSON_PATH = "/home/ayush/Projects/client/data/json/"
-MARKUP_PATH = "/home/ayush/Projects/client/data/markup/"
+# Paths of the data directory.
+JSON_PATH = "/root/f1jobs/client/data/json/"
+MARKUP_PATH = "/root/f1jobs/client/data/markup/"
 
 
 # HTML strings that are added to data written in the 'data/markup/' directory. This
