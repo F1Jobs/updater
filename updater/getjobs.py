@@ -106,9 +106,7 @@ def ferrari():
 
     # Getting the cookies by running 'phantomjs getcookies.js'. See the repo
     # for more details on 'getcookies.js'.
-    process = Popen(['phantomjs', 'getcookies.js'],
-                    stdout=PIPE,
-                    stderr=PIPE)
+    process = Popen(['phantomjs', 'getcookies.js'], stdout=PIPE, stderr=PIPE)
     for cookie in process.stdout:
         cookielist.append(cookie.decode("utf-8").rstrip())
     errc = process.returncode
