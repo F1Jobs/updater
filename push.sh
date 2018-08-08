@@ -20,7 +20,7 @@
 #   are not corrupted in any form
 
 # Get to the updater directory inside updater repo
-cd updater
+cd /root/f1jobs/updater/updater
 
 # Run the updater script
 python3 getjobs.py
