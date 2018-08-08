@@ -52,7 +52,7 @@ def mercedes():
 
     # Finding relavant tags in the markup by class name
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("div", class_ = "job-item")
+    tag = soup.find_all("div", class_="job-item")
 
     # Write the data to the dictionary. Key:Value pairs are Job-Title:Job-Link.
     for merc in tag:
@@ -93,10 +93,10 @@ def ferrari():
     # Note: This method is not very robust at the moment because it does not look beyond pre-
     # defined number of pages. It will be replaced with a better method soon.
     fer_dict = OrderedDict()
-    cookielist=[]
+    cookielist = []
     fer_url = "https://hr.ferrari.com/cvo3ferrari/jsp/repeatbody.jsp?jkcptlva"
     fer_job_url = "http://corporate.ferrari.com/en/career/career-opportunities"
-    
+
     def get_ferrari_jobs(r):
         soup = BeautifulSoup(r.content, 'html.parser')
         tag = soup.find_all("span", class_="rs_lab_prsearch")
@@ -107,7 +107,7 @@ def ferrari():
     # Getting the cookies by running 'phantomjs getcookies.js'. See the repo
     # for more details on 'getcookies.js'.
     process = Popen(['phantomjs', 'getcookies.js'],
-                    stdout=PIPE, 
+                    stdout=PIPE,
                     stderr=PIPE)
     for cookie in process.stdout:
         cookielist.append(cookie.decode("utf-8").rstrip())
@@ -203,7 +203,7 @@ def haas():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("a", class_ = "job_title_link")
+    tag = soup.find_all("a", class_="job_title_link")
 
     for has in tag:
         haas_dict[has.text] = haas_pre_url + has.get('href')
@@ -234,7 +234,7 @@ def renault():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("h1", class_ = "h4")
+    tag = soup.find_all("h1", class_="h4")
 
     for ren in tag:
         renault_dict[ren.text] = renault_pre_url + ren.parent.parent.get('href')
@@ -266,7 +266,7 @@ def redbull():
 
     soup = BeautifulSoup(r.content, 'html.parser')
 
-    tag = soup.find_all("span", class_ = "jobslist_listing_item_title_text")
+    tag = soup.find_all("span", class_="jobslist_listing_item_title_text")
     tag_ext = soup.select('a.button.button--primary.button--square.jobslist_listing_item_apply')
 
     for rbr, rbr_jobs_url in zip(tag, tag_ext):
@@ -297,7 +297,7 @@ def sauber():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("div", class_ = "jobs_single_listing")
+    tag = soup.find_all("div", class_="jobs_single_listing")
 
     for sau in tag:
         sauber_dict[sau.span.text] = sau.a.get('href')
@@ -328,7 +328,7 @@ def mclaren():
         print(e)
     
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("a", class_ = "jobTitle-link")
+    tag = soup.find_all("a", class_="jobTitle-link")
 
     for mc in tag:
         mc_dict[mc.text] = mc_pre_url + mc.get('href')
@@ -359,7 +359,7 @@ def williams():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("div", class_ = "job-title")
+    tag = soup.find_all("div", class_="job-title")
     
     for wil in tag:
         try:
@@ -392,7 +392,7 @@ def toro():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("td", class_ = "ms-vb-title")
+    tag = soup.find_all("td", class_="ms-vb-title")
 
     for tor in tag:
         toro_dict[tor.a.text] = tor.a.get('href').replace("&amp", "&")
