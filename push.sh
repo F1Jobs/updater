@@ -26,7 +26,7 @@ cd updater
 python3 getjobs.py
 
 # Get to the client directory
-cd /home/ayush/Projects/client
+cd /root/f1jobs/client
 
 # Check if there is something to be committed, if yes, stage the changes,
 # otherwise terminate indicating success
