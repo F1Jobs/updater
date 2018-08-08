@@ -28,6 +28,9 @@ python3 getjobs.py
 # Get to the client directory
 cd /root/f1jobs/client
 
+# Pull changes from the remote
+git pull --rebase origin master
+
 # Check if there is something to be committed, if yes, stage the changes,
 # otherwise terminate indicating success
 if [[ $(git status --porcelain | head -c1 | wc -c) -ne 0 ]]; then
