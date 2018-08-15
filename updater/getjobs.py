@@ -249,6 +249,37 @@ def renault():
             renault_mkp_fo.write(_empty + "\n\n")
 
 
+# Force India jobs. This method is similar to Mercedes.
+def forceindia():
+    forceindia_dict = OrderedDict()
+    forceindia_pre_url = "https://www.forceindiaf1.com"
+    forceindia_url = forceindia_pre_url + "/careers"
+
+    try:
+        r = requests.get(forceindia_url)
+    except requests.exceptions.RequestException as e:
+        print("An exception occured while connecting to Force India")
+        print(e)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
+    tag = soup.find_all("div", class_="views-field-title")
+
+    for sfi in tag:
+        forceindia_dict[sfi.a.text] = forceindia_pre_url + sfi.a.get('href')
+
+    with open(JSON_PATH + "SFI.json", "w") as forceindia_fo:
+        json.dump(forceindia_dict, forceindia_fo)
+    if(forceindia_dict):
+        with open(MARKUP_PATH + "SFI", "w") as forceindia_mkp_fo:
+            forceindia_mkp_fo.write(_count_pre + str(len(forceindia_dict)) + _count_end + "\n\n")
+            for k in forceindia_dict:
+                forceindia_mkp_fo.write(_content_pre + k + _content_mid + forceindia_dict[k] + _content_end)
+                forceindia_mkp_fo.write("\n\n")
+    else:
+        with open(MARKUP_PATH + "SFI", "w") as forceindia_mkp_fo:
+            forceindia_mkp_fo.write(_empty + "\n\n")
+
+
 # Red Bull jobs. This method is almost similar to Mercedes. There is slight difference
 # in the way the dictionary is formed.
 def redbull():
