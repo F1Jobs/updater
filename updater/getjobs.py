@@ -5,8 +5,6 @@
 # the 'data/' directory of the client repository. Each F1 team's data is
 # handled by separate functions, which are executed in parallel.
 
-# Important: Sahara Force India has no job listings currently, so their website
-# is not queried. One they add some jobs, I'll add a function for them.
 
 # Imports.
 import json
