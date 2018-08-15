@@ -444,7 +444,7 @@ def main():
 
     pool = Pool(processes=16)
 
-    constructors = [ferrari, haas, redbull, sauber, renault, mercedes, mclaren, williams, toro]
+    constructors = [ferrari, haas, redbull, sauber, renault, mercedes, mclaren, williams, toro, forceindia]
     for i in constructors:
         pool.apply_async(i)
 
