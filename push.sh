@@ -21,6 +21,7 @@
 
 # Get to the updater directory inside updater repo
 cd /root/f1jobs/updater/updater
+echo
 echo "Current directory - updater/updater"
 echo
 
@@ -31,6 +32,7 @@ echo "Updater script finished running"
 
 # Get to the client directory
 cd /root/f1jobs/client
+echo
 echo "Current directory - client"
 echo
 
