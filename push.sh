@@ -23,10 +23,6 @@
 cd /root/f1jobs/updater/updater
 echo "Current directory - Updater"
 
-# Pull changes from remote
-echo "Pulling changes from remote"
-git pull --rebase origin master
-
 # Run the updater script
 echo "Running the updater script"
 python3 getjobs.py
