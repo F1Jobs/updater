@@ -17,8 +17,8 @@ from subprocess import Popen, PIPE
 
 
 # Paths of the data directory.
-JSON_PATH = "/root/f1jobs/client/data/json/"
-MARKUP_PATH = "/root/f1jobs/client/data/markup/"
+JSON_PATH = "/root/client/data/json/"
+MARKUP_PATH = "/root/client/data/markup/"
 
 
 # HTML strings that are added to data written in the 'data/markup/' directory. This
