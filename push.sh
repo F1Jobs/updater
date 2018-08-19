@@ -20,10 +20,8 @@
 #   are not corrupted in any form
 
 # Get to the updater directory inside updater repo
-cd /root/f1jobs/updater/updater
-echo
+cd /root/updater/updater
 echo "Current directory - updater/updater"
-echo
 
 # Run the updater script
 echo "Running the updater script"
@@ -31,10 +29,8 @@ python3 getjobs.py
 echo "Updater script finished running"
 
 # Get to the client directory
-cd /root/f1jobs/client
-echo
+cd /root/client
 echo "Current directory - client"
-echo
 
 # Pull changes from remote
 echo "Pulling changes from remote"
