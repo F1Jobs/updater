@@ -32,10 +32,6 @@ echo "Updater script finished running"
 cd /root/client
 echo "Current directory - client"
 
-# Pull changes from remote
-echo "Pulling changes from remote"
-git pull --rebase origin master
-
 # Check if there is something to be committed, if yes, stage the changes,
 # otherwise terminate indicating success
 echo "Checking status"
@@ -54,6 +50,10 @@ git commit -m "Site updated"
 # A fancy 1-liner that can replace the above two sections if you don't care
 # about untracked files
 # git diff --exit-code --no-patch && exit 0 || git commit -a -m "Site updated"
+
+# Pull changes from remote
+echo "Pulling changes from remote"
+git pull --rebase origin master
 
 # Push to remote
 echo "Pushing changes to remote"
