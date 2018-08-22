@@ -21,30 +21,30 @@
 
 # Get to the updater directory inside updater repo
 cd /root/updater/updater
-echo "Current directory - updater/updater"
+echo "- Current directory - updater/updater"
 
 # Run the updater script
-echo "Running the updater script"
+echo "- Running the updater script"
 python3 getjobs.py
-echo "Updater script finished running"
+echo "- Updater script finished running"
 
 # Get to the client directory
 cd /root/client
-echo "Current directory - client"
+echo "- Current directory - client"
 
 # Check if there is something to be committed, if yes, stage the changes,
 # otherwise terminate indicating success
-echo "Checking status"
+echo "- Checking status"
 if [[ $(git status --porcelain | head -c1 | wc -c) -ne 0 ]]; then
-    echo "Found changes. Staging now"
+    echo "- Found changes. Staging now"
     git add --all
 else
-    echo "No changes found. Exiting..."
+    echo "- No changes found. Exiting..."
     exit 0
 fi
 
 # Commit the changes
-echo "Commiting the changes"
+echo "- Commiting the changes"
 git commit -m "Site updated"
 
 # A fancy 1-liner that can replace the above two sections if you don't care
@@ -52,10 +52,10 @@ git commit -m "Site updated"
 # git diff --exit-code --no-patch && exit 0 || git commit -a -m "Site updated"
 
 # Pull changes from remote
-echo "Pulling changes from remote"
+echo "- Pulling changes from remote"
 git pull --rebase origin master
 
 # Push to remote
-echo "Pushing changes to remote"
+echo "- Pushing changes to remote"
 git push origin master
-echo "Changes pushed. Exiting..."
+echo "- Changes pushed. Exiting..."
