@@ -19,8 +19,6 @@
 # - You are on the 'master' branch, and the remote or local repos
 #   are not corrupted in any form
 
-date >> /root/client/data/date.txt
-
 # Get to the updater directory inside updater repo
 cd /root/updater/updater
 echo "- Current directory - updater/updater"
