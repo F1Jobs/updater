@@ -188,8 +188,7 @@ def ferrari():
 # Haas jobs. This method is similar to Mercedes.
 def haas():
     haas_dict = OrderedDict()
-    haas_pre_url = "https://haasf1team.applytojob.com"
-    haas_url = haas_pre_url + "/apply/jobs/"
+    haas_url = "https://haasf1team.bamboohr.co.uk/jobs/embed2.php"
 
     try:
         r = requests.get(haas_url)
@@ -198,10 +197,10 @@ def haas():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("a", class_="job_title_link")
+    tag = soup.find_all("li", class_="BambooHR-ATS-Jobs-Item")
 
     for has in tag:
-        haas_dict[has.text] = haas_pre_url + has.get('href')
+        haas_dict[has.a.text] = "https:" + has.a.get('href')
     
     with open(JSON_PATH + "HAS.json", "w") as haas_fo:
         json.dump(haas_dict, haas_fo)
