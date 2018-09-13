@@ -13,4 +13,4 @@ This is the update mechanism of **[f1jobs.co](https://f1jobs.co)**, which runs o
 ## Todo
 
 * ~~Add comments to `getjobs.py`.~~
-* Add tests and Dockerfile.
+* Add tests
