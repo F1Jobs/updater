@@ -385,13 +385,10 @@ def williams():
         print(e)
 
     soup = BeautifulSoup(r.content, 'html.parser')
-    tag = soup.find_all("div", class_="job-title")
+    tag = soup.find_all("div", class_="col-md-8")
     
     for wil in tag:
-        try:
-            williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
-        except AttributeError:
-            pass
+        williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
 
     with open(JSON_PATH + "WIL.json", "w") as williams_fo:
         json.dump(williams_dict, williams_fo)
