@@ -387,7 +387,7 @@ def williams():
     tag = soup.find_all("div", class_="col-md-8")
     
     for wil in tag:
-        williams_dict[wil.a.text[1:]] = williams_pre_url + wil.a.get('href')
+        williams_dict[wil.a.text] = williams_pre_url + wil.a.get('href')
 
     with open(JSON_PATH + "WIL.json", "w") as williams_fo:
         json.dump(williams_dict, williams_fo)
